@@ -54,6 +54,8 @@
 								   <th>Image File</th>
 								   <th>Price</th>
 								   <th>Desciption</th>
+								   <th>Colours</th>
+								   <th>Tag Name</th>
 								   <th>Action</th>
 								</tr>
 								
@@ -87,6 +89,8 @@
 											<td><?php echo $row['image'];?></td>
 											<td><?php echo $row['price'];?></td>
 											<td><?php echo $row['description'];?></td>
+											<td><?php echo $row['color'];?></td>
+											<td><?php echo $row['tagname'];?></td>
 											<td>
 												<!-- Icons -->
 												<a href="updates.php?id=<?php echo $row['id'];?>" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
@@ -121,6 +125,10 @@
 									<label>Image</label>
 									<input class="text-input small-input" type="file" id="small-input" id="myFile"  name="filename"/>
 								<!--	<input type="file" id="myFile" name="filename"> -->
+								</p>
+								<p>
+									<label>Colour</label>
+									<input class="text-input small-input" type="text" id="small-input" name="pcolor" /> 
 								</p>
 
 								<p>

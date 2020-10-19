@@ -12,9 +12,15 @@
         $price = $_POST['pprice'];
         $image = $_POST['filename'];
         $descript = $_POST['describe'];
+        $tagname = $_POST['tags_name'];
+        $color = $_POST['pcolor'];
+        echo $color;
 
-        $sl1 = "UPDATE products SET name='$name', price='$price', image='$image', description='$descript' WHERE id=$idUp";
+        $sl1 = "UPDATE products SET name='$name', price='$price', image='$image', color='$color', tagname='$tagname', description='$descript' WHERE id=$idUp";
+        
         $run = $conn->query($sl1);
+       
+
         if ($run) {
         ?>       
         <script>
@@ -59,6 +65,19 @@
                                 <input class="text-input small-input" type="file" id="small-input" id="myFile"  name="filename" value="<?php echo $data['image'];?>">
                                 <?php echo $data['image'];?>
                             </p>
+                            <p>
+								<label>Colour</label>
+                                <input class="text-input small-input" type="text" id="small-input" name="pcolor"  value="<?php echo $data['color'];?>" /> 
+							</p>
+                            <p>
+									<label>Tags</label>
+									<input type="checkbox" name="tags_name" value="Fashion"/> Fashion
+									<input type="checkbox" name="tags_name" value="Ecommerce"/> Ecommerce
+									<input type="checkbox" name="tags_name" value="Shop"/> Shop
+									<input type="checkbox" name="tags_name" value="Hand Bag" /> Hand Bag
+									<input type="checkbox" name="tags_name" value="Laptop" /> Laptop
+									<input type="checkbox" name="tags_name" value="Headphone"/> Headphone
+								</p>
                             <p>
                                 <label>Description</label>
                                 <textarea class="text-input textarea wysiwyg" id="textarea" name="describe" value="<?php echo $data['description'];?>" cols="79" rows="15"></textarea>
