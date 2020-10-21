@@ -1,71 +1,63 @@
-<?php
-  include("admin/config.php");   
-?>
+<?php include("admin/config.php"); ?>
+<body>
+           <!-- product category -->
+  <section id="aa-product-details">
+  <?php
+              include("admin/config.php");   
+              $quickID = $_GET['id'];
+              echo $quickID;  
+            ?>
+              
 
-<div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <?php
+          $sql =  "SELECT * FROM products ORDER BY id ASC";
+          $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                  if($row['id'] == $quickID) {
+        ?>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="aa-product-details-area">
+              <!-- quick view modal -->                  
+              <div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">                      
                     <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       <div class="row">
-
-
-                      
-              <?php
-                $sql =  "SELECT * FROM products ORDER BY id ASC LIMIT 10";
-                $result = $conn->query($sql);
-                  if ($result->num_rows > 0) {
-                      while($row = $result->fetch_assoc()) {
-              ?>
-
                         <!-- Modal view slider -->
                         <div class="col-md-6 col-sm-6 col-xs-12">                              
                           <div class="aa-product-view-slider">                                
                             <div class="simpleLens-gallery-container" id="demo-1">
                               <div class="simpleLens-container">
                                   <div class="simpleLens-big-image-container">
-
-       
-                                      <a class="simpleLens-lens-image" data-lens-image="img/view-slider/large/polo-shirt-1.png">
-                                          <img src=<img src="shirts/<?php echo $row["image"];?>" class="simpleLens-big-image">
+                                      <a class="simpleLens-lens-image" data-lens-image="itemImage/<?php echo $row['image'] ?>">
+                                          <img src="itemImage/<?php echo $row['image'] ?>" width ="250px" height ="300px" class="simpleLens-big-image">
                                       </a>
                                   </div>
                               </div>
-                          <!--
                               <div class="simpleLens-thumbnails-container">
                                   <a href="#" class="simpleLens-thumbnail-wrapper"
-                                     data-lens-image="img/view-slider/large/polo-shirt-1.png"
-                                     data-big-image="img/view-slider/medium/polo-shirt-1.png">
-                                      <img src="img/view-slider/thumbnail/polo-shirt-1.png">
-                                  </a>                                    
-                                  <a href="#" class="simpleLens-thumbnail-wrapper"
-                                     data-lens-image="img/view-slider/large/polo-shirt-3.png"
-                                     data-big-image="img/view-slider/medium/polo-shirt-3.png">
-                                      <img src="img/view-slider/thumbnail/polo-shirt-3.png">
-                                  </a>
-
-                                  <a href="#" class="simpleLens-thumbnail-wrapper"
-                                     data-lens-image="img/view-slider/large/polo-shirt-4.png"
-                                     data-big-image="img/view-slider/medium/polo-shirt-4.png">
-                                      <img src="img/view-slider/thumbnail/polo-shirt-4.png">
-                                  </a>
-                              </div> -->
+                                     data-lens-image="itemImage/<?php echo $row['image'] ?>"
+                                     data-big-image="itemImage/<?php echo $row['image'] ?>">
+                                      <img src="itemImage/<?php echo $row['image'] ?>">
+                                  </a>                                   
+                              </div>
                             </div>
                           </div>
                         </div>
-
-                      <?php }
-                  }
-                  ?>
+                        
                         <!-- Modal view content -->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="aa-product-view-content">
-                            <h3>T-Shirt</h3>
+                            <h3><?php echo $row['name'] ?></h3>
                             <div class="aa-price-block">
-                              <span class="aa-product-view-price">$34.99</span>
+                              <span class="aa-product-view-price">$<?php echo $row['price'] ?></span>
                               <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis animi, veritatis quae repudiandae quod nulla porro quidem, itaque quis quaerat!</p>
+                            <p><?php echo $row['description'] ?></p>
                             <h4>Size</h4>
                             <div class="aa-prod-view-size">
                               <a href="#">S</a>
@@ -89,8 +81,8 @@
                               </p>
                             </div>
                             <div class="aa-prod-view-bottom">
-                              <a href="#" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                              <a href="#" class="aa-add-to-cart-btn">View Details</a>
+                            <a class="aa-add-card-btn add-to-cart" href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                            <a href="product-detail.php?id=<?php echo $row['id'] ?>" class="aa-add-to-cart-btn">View Details</a>
                             </div>
                           </div>
                         </div>
@@ -99,5 +91,16 @@
                   </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
               </div>
-                <!-- / quick view modal --> 
-            
+              <!-- / quick view modal -->   
+            </div>  
+          </div>
+        </div>
+      </div>
+   
+    <?php }
+              }
+            }
+            ?>
+  </section>
+  <!-- / product category -->
+

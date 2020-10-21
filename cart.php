@@ -133,12 +133,51 @@
               </div>
               <!-- / logo  -->
                <!-- cart box -->
-              <div class="aa-cartbox">
-                <a class="aa-cart-link" href="#">
+               <div class="aa-cartbox">
+                <a class="aa-cart-link" href="cart.php">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">SHOPPING CART</span>
-                  <span class="aa-cart-notify">2</span>
+                  <span class="aa-cart-notify"><div id="cart-item"></div></span>
                 </a>
+                <div class="aa-cartbox-summary">
+         <?php  include("admin/config.php");  ?>
+                <?php
+                    $subtotal = 0;
+                    $total = 0;
+                      $sql = "SELECT * FROM cart";
+                      $result = $conn->query($sql);
+                          if ($result->num_rows > 0) 
+                          {
+                            while($row = $result->fetch_assoc()) 
+                            {
+                              $total = ($row["price"] * $row["qty"]);
+                              $subtotal= $subtotal + $total ;
+                                           
+                ?>		
+                   
+                <ul>
+                    <li>
+                      <a class="aa-cartbox-img" href="#"><img src="itemImage/<?php echo $row["image"];?>" width="150px" , height="150px" alt="img"></a>
+                      <div class="aa-cartbox-info">
+                        <h4><a href="#"><?php echo $row['name'] ?></a></h4>
+                        <p><?php echo $row['qty'] ?> x <?php echo $row['price'] ?></p>
+                      </div>
+                      <a class="aa-remove-product" href="deleteAction.php?id=<?php echo $row['id'] ?>"><span class="fa fa-times"></span></a>
+                    </li>                  
+                    <li>
+                      <span class="aa-cartbox-total-title">
+                        Total
+                      </span>
+                      <span class="aa-cartbox-total-price">
+                      <?php echo $total ?>
+                      </span>
+                    </li>
+                  </ul>
+        <?php   }
+             }
+             ?>  
+             <a href="checkout.php" class="aa-cart-view-btn">Checkout</a>          
+                </div>
               </div>
                   
               <!-- / cart box -->
@@ -315,11 +354,8 @@
        <div class="col-md-12">
          <div class="cart-view-area">
            <div class="cart-view-table">
-            
-               <div class="table-responsive">
-                  <table class="table">
-                  
-                  
+            <div class="table-responsive">
+                <table class="table">
                     <thead>
                       <tr>
                         <th>Action</th>
@@ -330,23 +366,17 @@
                         <th>Total</th>
                       </tr>
                     </thead>
-                    <?php
-                    include("admin/config.php");
-                    ?>
           <?php
                     $subtotal = 0;
-                    $total = 0;
                       $sql = "SELECT * FROM cart";
                       $result = $conn->query($sql);
                           if ($result->num_rows > 0) 
                           {
                             while($row = $result->fetch_assoc()) 
                             {
-                              $total = ($row["price"] * $row["qty"]);
-                              $subtotal= $subtotal + $total ;
+                              $subtotal= ($subtotal + ($row["total_price"])) ;
                                            
                 ?>		
-                   
                     <tbody>
                       <tr>
                         <td>
@@ -354,34 +384,35 @@
                           <fa class="fa fa-close"></fa>
                           </a>
                       </td>
+                      <input type="hidden" class="pid" value="<?php echo $row['id'] ?>" >
+                      <input type="hidden" class="pcost" value="<?php echo $row['price'] ?>">
                         <td><a href="#"><img src="itemImage/<?php echo $row["image"];?>" width="150px" , height="150px" alt="img"></a></td>
                         <td><a class="aa-cart-title" href="#"><?php echo $row["name"];?></a></td>
                         <td>$<?php echo $row["price"];?></td>
-                        <td><input class="aa-cart-quantity" type="number" value="1"></td>
-                        <td>$<?php echo $total;?></td>
+                        <td><input class="aa-cart-quantity itemQty" type="number" name="number" value="<?php echo $row["qty"];?>"></td>
+                        <td>$<?php echo $row["total_price"];?></td>
                       </tr>
-                      
-                      </tbody>
-                      <?php       }
+                    </tbody>	
+    <?php       }
           } ?>
                       <tr>
-                          <td colspan="6" class="aa-cart-view-bottom">
+                          <td colspan="7" class="aa-cart-view-bottom">
                           <div class="aa-cart-coupon">
                             <input class="aa-coupon-code" type="text" placeholder="Coupon">
                             <input class="aa-cart-view-btn" type="submit" value="Apply Coupon">
                           </div>
-                          <input class="aa-cart-view-btn" type="submit" value="Update Cart">
+                          <a href="add-to-cart.php">
+                            <input class="aa-cart-view-btn updateCart" type="submit" name="Update"  value="Update Cart">
+                          </a>
                         </td>
                       </tr>
                   </table>
                 </div>
-            
              <!-- Cart Total view -->
              <div class="cart-view-total">
                <h4>Cart Totals</h4>
                <table class="aa-totals-table">
- 
-                 <tbody>
+                <tbody>
                    <tr>
                      <th>Subtotal</th>
                      <td>$<?php echo $subtotal;?></td>
@@ -391,9 +422,8 @@
                      <td>$<?php echo $subtotal;?></td>
                    </tr>
                  </tbody>
-   
-               </table>
-               <a href="#" class="aa-cart-view-btn">Proced to Checkout</a>
+                </table>
+               <a href="checkout.php" class="aa-cart-view-btn">Proced to Checkout</a>
              </div>
            </div>
          </div>
@@ -401,6 +431,34 @@
      </div>
    </div>
  </section>
+ 
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script>
+      $(document).ready(function(){
+      $(".itemQty").on('change',function(e){
+        e.preventDefault();
+        var $tr = $(this).closest("tr");
+        var pid = $tr.find(".pid").val();
+        var pprice = $tr.find(".pcost").val();
+        var qty = $tr.find(".itemQty").val();
+        console.log(qty);
+        $.ajax({
+          url: 'add-to-cart.php',
+          method: 'post',
+          cache: false,
+          data: {qty:qty, price:pprice, id:pid},
+          success:function(response){
+          console.log(response);
+        }
+    });
+  });
+    $(".updateCart").click(function(e){
+      e.preventDefault();
+      location.reload(true);
+  });
+});
+</script>
  <!-- / Cart view section -->
 
 
@@ -562,6 +620,7 @@
     <script type="text/javascript" src="js/nouislider.js"></script>
     <!-- Custom js -->
     <script src="js/custom.js"></script> 
+
 
   </body>
 </html>

@@ -140,33 +140,40 @@
                   <span class="aa-cart-notify">2</span>
                 </a>
                 <div class="aa-cartbox-summary">
-                  <ul>
+          <?php  include("admin/config.php");  ?>
+        <?php     $subtotal = 0;
+                  $total = 0;
+                  $sql = "SELECT * FROM cart";
+                  $result = $conn->query($sql);
+                    if ($result->num_rows > 0) 
+                    {
+                      while($row = $result->fetch_assoc()) 
+                      {
+                        $total = ($row["price"] * $row["qty"]);
+                        $subtotal= $subtotal + $total ;
+        ?>		
+                <ul>
                     <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-2.jpg" alt="img"></a>
+                      <a class="aa-cartbox-img" href="#"><img src="itemImage/<?php echo $row["image"];?>" width="150px" , height="150px" alt="img"></a>
                       <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
+                        <h4><a href="#"><?php echo $row['name'] ?></a></h4>
+                        <p><?php echo $row['qty'] ?> x <?php echo $row['price'] ?></p>
                       </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="img/woman-small-1.jpg" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>                    
+                      <a class="aa-remove-product" href="deleteAction.php?id=<?php echo $row['id'] ?>"><span class="fa fa-times"></span></a>
+                    </li>                  
                     <li>
                       <span class="aa-cartbox-total-title">
                         Total
                       </span>
                       <span class="aa-cartbox-total-price">
-                        $500
+                      <?php echo $total ?>
                       </span>
                     </li>
                   </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="#">Checkout</a>
+        <?php   }
+             }
+             ?>  
+                  <a class="aa-cartbox-checkout aa-primary-btn" href="checkout.php">Checkout</a>
                 </div>
               </div>
               <!-- / cart box -->
@@ -327,7 +334,7 @@
       <div class="aa-catg-head-banner-content">
         <h2>Checkout Page</h2>
         <ol class="breadcrumb">
-          <li><a href="index.html">Home</a></li>                   
+          <li><a href="menProduct.php">Home</a></li>                   
           <li class="active">Checkout</li>
         </ol>
       </div>
@@ -342,7 +349,7 @@
      <div class="row">
        <div class="col-md-12">
         <div class="checkout-area">
-          <form action="">
+          <form action="" method="POST">
             <div class="row">
               <div class="col-md-8">
                 <div class="checkout-left">
@@ -606,24 +613,31 @@
                           <th>Total</th>
                         </tr>
                       </thead>
+                   <?php   
+                      $subtotal = 0;
+                      $total = 0;
+                      $sql = "SELECT * FROM cart";
+                      $result = $conn->query($sql);
+                        if ($result->num_rows > 0) 
+                        {
+                          while($row = $result->fetch_assoc()) 
+                          {
+                            $total = ($row["price"] * $row["qty"]);
+                            $subtotal= $subtotal + $total ;
+              ?>		
                       <tbody>
                         <tr>
-                          <td>T-Shirt <strong> x  1</strong></td>
-                          <td>$150</td>
-                        </tr>
-                        <tr>
-                          <td>Polo T-Shirt <strong> x  1</strong></td>
-                          <td>$250</td>
-                        </tr>
-                        <tr>
-                          <td>Shoes <strong> x  1</strong></td>
-                          <td>$350</td>
+                          <td><?php echo $row['name'] ?><strong> x <?php echo $row['qty'] ?></strong></td>
+                          <td>$<?php echo $row['total_price'] ?></td>
                         </tr>
                       </tbody>
+            <?php     }
+                   }
+          ?>       
                       <tfoot>
                         <tr>
                           <th>Subtotal</th>
-                          <td>$750</td>
+                          <td>$<?php echo $subtotal ?></td>
                         </tr>
                          <tr>
                           <th>Tax</th>
@@ -631,19 +645,21 @@
                         </tr>
                          <tr>
                           <th>Total</th>
-                          <td>$785</td>
+                          <td>$<?php echo ($subtotal + 35) ?></td>
                         </tr>
                       </tfoot>
+               
                     </table>
                   </div>
-                  <h4>Payment Method</h4>
-                  <div class="aa-payment-method">                    
-                    <label for="cashdelivery"><input type="radio" id="cashdelivery" name="optionsRadios"> Cash on Delivery </label>
-                    <label for="paypal"><input type="radio" id="paypal" name="optionsRadios" checked> Via Paypal </label>
-                    <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">    
-                    <input type="submit" value="Place Order" class="aa-browse-btn">                
+                  
+                    <h4>Payment Method</h4>
+                    <div class="aa-payment-method">                   
+                      <label for="cashdelivery"><input type="radio" id="cashdelivery" name="payMethod" value="Cash on Delivery">Cash on Delivery</label>
+                      <label for="paypal"><input type="radio" id="paypal" name="payMethod" value="Via Paypal" checked="checked"> Via Paypal </label>
+                      <img src="https://www.paypalobjects.com/webstatic/mktg/logo/AM_mc_vs_dc_ae.jpg" border="0" alt="PayPal Acceptance Mark">    
+                      <a href="placeorder.php?action=order"><input type="button" name="submit" class="aa-browse-btn" value="Place Order"></a>                
+                    </div>
                   </div>
-                </div>
               </div>
             </div>
           </form>

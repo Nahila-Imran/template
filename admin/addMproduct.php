@@ -1,6 +1,4 @@
 <?php 
-	include('header.php'); 
-	include('sidebar.php');
 	include("config.php");
 ?>
 		

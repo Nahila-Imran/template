@@ -4,8 +4,6 @@
 
 ?>
 
-
-
               <div class="aa-product-catg-head-right">
                 <a id="grid-catg" href="#"><span class="fa fa-th"></span></a>
                 <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
@@ -42,7 +40,7 @@
                     </form>
                   </figure>                         
                   <div class="aa-product-hvr-content">
-                    <a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+                  <a href="product-detail.php?id=<?php echo $row['id'] ?>" data-placement="top" title="Quick View" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
                   </div>
                 </li>
                 <!-- start single product item -->

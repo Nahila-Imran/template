@@ -2,11 +2,9 @@
 <?php 
 include("header.php");
 include("admin/config.php");
-
 ?>
 
               <div class="aa-product-catg-head-right">
-              
                 <a id="grid-catg" href="#"><span class="fa fa-th"></span></a>
                 <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
               </div>
@@ -21,38 +19,32 @@ include("admin/config.php");
                   if ($result->num_rows > 0) {
                       while($row = $result->fetch_assoc()) {
             ?>
-
                 <!-- start single product item -->
+                <form class="form-submit" method="post">
                 <li>
                   <figure>
-                  <form action="" class="form-submit">
-
                     <input type	= "hidden" class="pid" value= "<?php echo $row["id"];?>"/>	
                     <input type	= "hidden" class="pname" value= "<?php echo $row["name"];?>"/>
                     <input type= "hidden" class="pprice" value= "<?php echo $row["price"];?>"/>
                     <input type= "hidden" class="pimage" value= "<?php echo $row["image"];?>"/>
-                    
-
                     <a class="aa-product-img" href="#"><img src="itemImage/<?php echo $row["image"];?>" alt="polo shirt img" width ="250px" height ="300px"></a>
-                    
-        <!--            <button class="aa-add-card-btn add-to-cart"><span class="fa fa-shopping-cart"></span>Add To Cart</button>  -->
                     <a class="aa-add-card-btn add-to-cart" href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
                     <figcaption>
                       <h4 class="aa-product-title"><a href="#"><?php echo $row["name"];?></a></h4>
                       <span class="aa-product-price">$<?php echo $row["price"];?>.00</span><span class="aa-product-price"></span>
                     </figcaption>
-                  </form>
-                  </figure>                         
+                 </figure>                         
                   <div class="aa-product-hvr-content">
-                    <a href="#" class ="quickview" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+                    <a href="product-detail.php?id=<?php echo $row['id'] ?>" data-placement="top" title="Quick View" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
                   </div>
                 </li>
+              </form>
                 <!-- start single product item -->
 <?php	         }
             }
 ?>
+           
             </ul>
-
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
             <script type="text/javascript" src="assets/jquery-3.5.1.min.js"></script>
             <script>
@@ -72,61 +64,56 @@ include("admin/config.php");
                     data: {pid:pid, pname:pname, pprice:pprice, pimage:pimage},
                     success:function(response){
                       $("#message").html(response);
-                    
                     }
                   });
                 });
               });
-              </script> 
-              <script> 
-              var save[];
-                $(document).ready(function(){
-                  $(".quickview").click(function(e){
-                    e.preventDefault();
-                    var $form = $(this).closest(".form-submit");
-                    
-                    var pid = $form.find(".pid").val();
-                    var pname = $form.find(".pname").val();
-                    var pprice = $form.find(".pprice").val();
-                    var pimage = $form.find(".pimage").val();
-                    var product = getProduct(pid);
-
-                    var save =[{id: pid, name: pname , price: pprice, image: pimage}];
-                    addToCart(product);
-                  )};
-                )};
-              </script> 
-
-
-           <!-- quick view modal -->                  
+          </script> 
+            <!-- quick view modal -->               
             <div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                  <div class="modal-content">  
-                    <div class="modal-body">
+             <div class="modal-dialog">
+                <div class="modal-content"> 
+                <?php
+                   $quickID = isset($_GET['id']);
+                   echo $quickID;
+                   $sql =  "SELECT * FROM products ORDER BY id ASC";
+                   $result = $conn->query($sql);
+                     if ($result->num_rows > 0) {
+                         while($row = $result->fetch_assoc()) {
+                           if($row['id'] == $quickID) {
+                       ?>  
+                
+                   <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                   <div class="row">
-                      <!-- Modal view slider -->
-                      <div class="col-md-6 col-sm-6 col-xs-12"> 
-                        <div class="aa-product-view-slider">  
-                          <div class="simpleLens-gallery-container" id="demo-1">
+                      <div class="row">
+                        <!-- Modal view slider -->
+                        <div class="col-md-6 col-sm-6 col-xs-12">                              
+                          <div class="aa-product-view-slider">                                
+                            <div class="simpleLens-gallery-container" id="demo-1">
                               <div class="simpleLens-container">
                                   <div class="simpleLens-big-image-container">
-                                    <a class="simpleLens-lens-image" data-lens-image="itemImage/save.[image]">
-                                        <img src="itemImage/save.[image]" alt="polo shirt img" width ="250px" height ="300px" class="simpleLens-big-image">
-                                    </a>
+                                      <a class="simpleLens-lens-image" data-lens-image="img/view-slider/large/polo-shirt-1.png">
+                                          <img src="img/view-slider/medium/polo-shirt-1.png" class="simpleLens-big-image">
+                                      </a>
                                   </div>
-                               </div>
+                              </div>
+                              <div class="simpleLens-thumbnails-container">
+                                  <a href="#" class="simpleLens-thumbnail-wrapper"
+                                     data-lens-image="img/view-slider/large/polo-shirt-1.png"
+                                     data-big-image="img/view-slider/medium/polo-shirt-1.png">
+                                      <img src="img/view-slider/thumbnail/polo-shirt-1.png">
+                                  </a>                                    
+                              </div>
                             </div>
                           </div>
                         </div>
-                        
                         <!-- Modal view content -->
                         <div class="col-md-6 col-sm-6 col-xs-12">
                           <div class="aa-product-view-content">
-                            <h3>Name</h3>
+                            <h3>T-Shirt</h3>
                             <div class="aa-price-block">
-                              <span class="aa-product-view-price"></span>
-                              <p class="aa-product-avilability">Availability: <span>In stock</span></p>
+                              <span class="aa-product-view-price">$34.99</span>
+                              <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                             </div>
                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis animi, veritatis quae repudiandae quod nulla porro quidem, itaque quis quaerat!</p>
                             <h4>Size</h4>
@@ -152,18 +139,25 @@ include("admin/config.php");
                               </p>
                             </div>
                             <div class="aa-prod-view-bottom">
-                              <a href="cart.php" class="aa-add-to-cart-btn"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
-                              <a href="#" class="aa-add-to-cart-btn">View Details</a>
+                            <a class="aa-add-card-btn add-to-cart" href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                              <a href="product-detail.php?id=<?php echo $row['id'] ?>" class="aa-add-to-cart-btn">View Details</a>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>  
+                    </div> 
+      <?php       }
+                }
+              }
+            
+        ?>
+
                   </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
               </div>
-              <!-- / quick view modal -->   
+  <!-- / quick view modal -->   
             </div>
+          
             <div class="aa-product-catg-pagination">
               <nav>
                 <ul class="pagination">
@@ -210,7 +204,6 @@ include("admin/config.php");
                 <a href="tagname.php?id=<?php echo 'Hand Bag'?>">Hand Bag</a>
                 <a href="tagname.php?id=<?php echo 'Laptop'?>">Laptop</a>
                 <a href="tagname.php?id=<?php echo 'Headphone'?>">Head Phone</a>
-                
               </div>
             </div>
             
@@ -243,8 +236,6 @@ include("admin/config.php");
                 <a class="aa-color-black" href="colors.php?id=<?php echo 'black'?>"></a>
                 <a class="aa-color-white" href="colors.php?id=<?php echo 'white'?>"></a>
                 <a class="aa-color-cyan" href="colors.php?id=<?php echo 'cyan'?>"></a>
-                
-        
               </div>                            
             </div>
             <!-- single sidebar -->

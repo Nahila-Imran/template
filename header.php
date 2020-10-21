@@ -142,7 +142,7 @@
                 <a class="aa-cart-link" href="cart.php">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">SHOPPING CART</span>
-                  <span class="aa-cart-notify">2</span>
+                  <span class="aa-cart-notify" id="cart-item"></span>
                 </a>
                 <div class="aa-cartbox-summary">
          <?php  include("admin/config.php");  ?>
@@ -165,7 +165,7 @@
                       <a class="aa-cartbox-img" href="#"><img src="itemImage/<?php echo $row["image"];?>" width="150px" , height="150px" alt="img"></a>
                       <div class="aa-cartbox-info">
                         <h4><a href="#"><?php echo $row['name'] ?></a></h4>
-                        <p>1 x <?php echo $row['price'] ?></p>
+                        <p><?php echo $row['qty'] ?> x <?php echo $row['price'] ?></p>
                       </div>
                       <a class="aa-remove-product" href="deleteAction.php?id=<?php echo $row['id'] ?>"><span class="fa fa-times"></span></a>
                     </li>                  
@@ -174,14 +174,14 @@
                         Total
                       </span>
                       <span class="aa-cartbox-total-price">
-                      <?php echo $subtotal ?>
+                      <?php echo $total ?>
                       </span>
                     </li>
                   </ul>
         <?php   }
              }
              ?>  
-             <a href="#" class="aa-cart-view-btn">Checkout</a>          
+             <a href="checkout.php" class="aa-cart-view-btn">Checkout</a>          
                 </div>
               </div>
            

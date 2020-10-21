@@ -40,7 +40,23 @@ if(isset($_POST["pid"]))
 			</div>';
 		}
 	}
-
+	if(isset($_POST['qty']))
+	{
+		$qty= $_POST["qty"];
+		$id= $_POST["id"];
+		$price= $_POST["price"];
+		$total_price= ($qty * $price);
+	
+		$sl1 = "UPDATE cart SET qty='$qty', total_price='$total_price' WHERE id=$id";
+		$run = $conn->query($sl1);
+	}
+	if(isset($_POST['cartItem']) && isset($_POST['cartItem']) == 'cart_item')
+	{
+		$sql2 = "SELECT * FROM cart";
+		$res = $conn->query($sql2);
+		$rows = $res->num_rows;
+		echo $rows;
+	}
 	
 ?>
 	
